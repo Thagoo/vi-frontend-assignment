@@ -17,6 +17,8 @@ import {
 } from "@tanstack/react-table";
 import { DataTablePagination } from "./data-table-pagination";
 
+import { Checkbox } from "@/components/ui/checkbox";
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
@@ -40,6 +42,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
+                                <TableHead>
+                                    <Checkbox disabled />
+                                </TableHead>
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id} colSpan={header.colSpan}>
@@ -62,6 +67,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
+                                    <TableCell>
+                                        <Checkbox onClick={() => row.toggleSelected()} />
+                                    </TableCell>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
