@@ -30,6 +30,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        columnResizeMode: "onChange",
+        columnResizeDirection: "rtl",
+        defaultColumn: {
+            minSize: 10,
+            maxSize: 900,
+            enableResizing: true,
+        },
     });
 
     // TASK : Make first 2 columns (i.e. checkbox and task id) sticky
@@ -45,9 +52,23 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                 <TableHead>
                                     <Checkbox disabled />
                                 </TableHead>
+
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} colSpan={header.colSpan}>
+                                        <TableHead
+                                            key={header.id}
+                                            colSpan={header.colSpan}
+                                            className={`${
+                                                header.column.getIsResizing() ? "isResizing" : ""
+                                            }`}
+                                            style={{ width: header.getSize() }}
+                                        >
+                                            <div
+                                                onMouseDown={header.getResizeHandler()}
+                                                onTouchStart={header.getResizeHandler()}
+                                                className="min-w-[60px] max-w-[200px] cursor-col-resize resizer"
+                                                style={{ width: header.getSize() }}
+                                            />
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -71,7 +92,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                         <Checkbox onClick={() => row.toggleSelected()} />
                                     </TableCell>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell
+                                            key={cell.id}
+                                            style={{
+                                                width: cell.column.getSize(),
+                                            }}
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext(),

@@ -101,3 +101,27 @@
 .sticky-cols[data-state="selected"] > td:nth-child(2) {
     background-color: hsl(var(--muted));
 }
+
+/* Column Resizer */
+.resizer {
+    position: absolute;
+    top: 0;
+    height: 40px;
+    user-select: none;
+    touch-action: none;
+}
+
+.isResizing {
+    background-color: hsl(var(--muted));
+    opacity: 1;
+}
+
+@media (hover: hover) {
+    .resizer {
+        opacity: 0;
+    }
+
+    *:hover > .resizer {
+        opacity: 1;
+    }
+}
